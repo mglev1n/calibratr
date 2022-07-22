@@ -2,7 +2,7 @@ Package: calibratr
 Title: Calibration Metrics for Yardstick
 Version: 0.0.0.9000
 Authors@R: 
-    person("Michael", "Levin", , "mglev1n@gmailc.om", role = c("aut", "cre"),
+    person("Michael", "Levin", , "mglev1n@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9937-9932"))
 Description: This package provides calibration metrics for use with the {yardstick} package, which is used to calculate performance metrics for models developed within the {Tidymodels} framework.
 License: MIT + file LICENSE
