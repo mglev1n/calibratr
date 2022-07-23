@@ -52,11 +52,11 @@ sbrier(data, ...)
 )
 }
 \arguments{
-\item{data}{A data.frame containing the columns specified by truth and ....}
+\item{data}{A data.frame containing the columns specified by \code{truth} and \code{...}}
 
 \item{...}{not currently used}
 
-\item{truth}{A data.frame containing the columns specified by \code{truth} and \code{estimate}}
+\item{truth}{The unquoted column name corresponding to the \code{truth} column.}
 
 \item{estimate}{If truth is binary, a numeric vector of class probabilities corresponding to the "relevant" class.}
 
@@ -74,6 +74,19 @@ sbrier(data, ...)
 \details{
 Brier scores within the interval between 0 and 1, with scores closer to 0 indicating better model performance. The scaled Brier score (also known as Brier Skill Score) ranges from \code{-Inf} to 1, with scores closer to 1 indicating better model performance. Scores less than 0 represent models performing worse than a reference, and scores equal to 1 represent models equivalent to predicting the overall frequency of the class being predicted within the dataset being scored.
 }
+\section{Relevant Level}{
+
+
+There is no common convention on which factor level should
+automatically be considered the "event" or "positive" result
+when computing binary classification metrics. In \code{yardstick}, the default
+is to use the \emph{first} level. To alter this, change the argument
+\code{event_level} to \code{"second"} to consider the \emph{last} level of the factor the
+level of interest. For multiclass extensions involving one-vs-all
+comparisons (such as macro averaging), this option is ignored and
+the "one" level is always the relevant result.
+}
+
 \references{
 Brier, Glenn (1950). "VERIFICATION OF FORECASTS EXPRESSED IN TERMS OF PROBABILITY." \emph{Monthly Weather Review}. Vol 78, Iss 1, pp 1-3
 }
@@ -81,3 +94,4 @@ Brier, Glenn (1950). "VERIFICATION OF FORECASTS EXPRESSED IN TERMS OF PROBABILIT
 Michael Levin
 }
 \concept{class probability metrics}
+\concept{prob metrics}

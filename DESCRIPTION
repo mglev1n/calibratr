@@ -11,7 +11,10 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Imports: 
     dplyr,
+    ggplot2,
+    Hmisc,
     magrittr,
+    patchwork,
     rlang,
     tidyr,
     yardstick

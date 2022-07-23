@@ -10,8 +10,8 @@
 #'
 #' @family class probability metrics
 #'
-#' @param data A data.frame containing the columns specified by truth and ....
-#' @param truth 	A data.frame containing the columns specified by `truth` and `estimate`
+#' @param data A data.frame containing the columns specified by `truth` and `...`
+#' @param truth The unquoted column name corresponding to the `truth` column.
 #' @param estimate If truth is binary, a numeric vector of class probabilities corresponding to the "relevant" class.
 #' @param estimator "binary" is only relevant for the two class case
 #' @param na_rm A logical value indicating whether NA values should be stripped before the computation proceeds.
@@ -22,6 +22,10 @@
 #' Brier, Glenn (1950). "VERIFICATION OF FORECASTS EXPRESSED IN TERMS OF PROBABILITY." _Monthly Weather Review_. Vol 78, Iss 1, pp 1-3
 #'
 #' @author Michael Levin
+#'
+#' @family prob metrics
+#' @templateVar metric_fn brier
+#' @template event_first
 #'
 #' @import yardstick rlang dplyr tidyr
 
