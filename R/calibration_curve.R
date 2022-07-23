@@ -21,12 +21,13 @@
 #' @template event_first
 #'
 
-##' @param data A data.frame containing the columns specified by `truth` and `...`
-##' @param truth The unquoted column name corresponding to the `truth` column.
-##' @param na_rm A logical value indicating whether NA values should be stripped before the computation proceeds.
-##' @param event_level A single string. Either "first" or "second" to specify which level of truth to consider as the "event". This argument is only applicable when estimator = "binary".
-##' @param case_weights (not currently used)
-##' @param ... A set of unquoted column names or one or more dplyr selector functions to choose which variables contain the class probabilities. If truth is binary, only 1 column should be selected. Otherwise, there should be as many columns as factor levels of truth.
+#' @param data A data.frame containing the columns specified by `truth` and `...`
+#' @param truth The unquoted column name corresponding to the `truth` column.
+#' @param na_rm A logical value indicating whether NA values should be stripped before the computation proceeds.
+#' @param event_level A single string. Either "first" or "second" to specify which level of truth to consider as the "event". This argument is only applicable when estimator = "binary".
+#' @param case_weights (not currently used)
+#' @param bins A single `numeric` value defining the number of probability bins to consider. Defaults to 10.
+#' @param ... A set of unquoted column names or one or more dplyr selector functions to choose which variables contain the class probabilities. If truth is binary, only 1 column should be selected. Otherwise, there should be as many columns as factor levels of truth.
 
 #' @import ggplot2
 #' @import yardstick
@@ -46,7 +47,7 @@ calib_curve <- function(data, ...) {
 calib_curve.data.frame <- function(data,
                                 truth,
                                 ...,
-                                # bins = 10,
+                                bins = 10,
                                 na_rm = TRUE,
                                 event_level = yardstick:::yardstick_event_level(),
                                 case_weights = NULL) {
@@ -60,7 +61,7 @@ calib_curve.data.frame <- function(data,
     estimate = !!estimate,
     na_rm = na_rm,
     event_level = event_level,
-    # bins = bins,
+    metric_fn_options = list(bins = bins),
     case_weights = !!enquo(case_weights)
   )
 
@@ -73,6 +74,7 @@ calib_curve_vec <- function(truth,
                          na_rm = TRUE,
                          event_level = yardstick:::yardstick_event_level(),
                          case_weights = NULL,
+                         bins = 10,
                          ...) {
   estimator <- finalize_estimator(truth, metric_class = "calib_curve")
 
@@ -80,7 +82,8 @@ calib_curve_vec <- function(truth,
   calib_curve_impl <- function(truth,
                             estimate,
                             ...,
-                            case_weights = NULL) {
+                            case_weights = NULL,
+                            bins = 10) {
     check_dots_empty()
 
     calib_curve_estimator_impl(
@@ -88,7 +91,8 @@ calib_curve_vec <- function(truth,
       estimate = estimate,
       estimator = estimator,
       event_level = event_level,
-      case_weights = case_weights
+      case_weights = case_weights,
+      bins = bins
     )
   }
 
@@ -99,7 +103,8 @@ calib_curve_vec <- function(truth,
     na_rm = na_rm,
     estimator = estimator,
     case_weights = case_weights,
-    cls = c("factor", "numeric")
+    cls = c("factor", "numeric"),
+    bins = bins
   )
 }
 
@@ -107,9 +112,10 @@ calib_curve_estimator_impl <- function(truth,
                                     estimate,
                                     estimator,
                                     event_level,
-                                    case_weights) {
+                                    case_weights,
+                                    bins) {
   if (yardstick:::is_binary(estimator)) {
-    calib_curve_binary(truth, estimate, event_level, case_weights)
+    calib_curve_binary(truth, estimate, event_level, case_weights, bins)
   } else {
     # multiclass not yet implemented
     # calib_curve_multiclass(truth, estimate, case_weights)
@@ -119,7 +125,15 @@ calib_curve_estimator_impl <- function(truth,
 calib_curve_binary <- function(truth,
                             estimate,
                             event_level,
-                            case_weights) {
+                            case_weights,
+                            bins) {
+
+    if (!rlang::is_bare_numeric(bins, n = 1L)) {
+      abort("`bins` must be a single numeric value.")
+    }
+    if (!(bins >= 0)) {
+      abort("`bins` must be a positive value.")
+    }
 
     truth <- unclass(truth)
 
@@ -132,7 +146,7 @@ calib_curve_binary <- function(truth,
 
   df <- tibble(truth = truth, estimate = estimate)
   df %>%
-    mutate(.bin = ntile(estimate, 10)) %>%
+    mutate(.bin = ntile(estimate, bins)) %>%
     group_by(.bin) %>%
     summarize(.estimate = mean(estimate),
               .truth = mean(truth),

@@ -16,8 +16,15 @@ two_class_resamples <- dplyr::bind_rows(
   dplyr::group_by(Resample)
 
 test_that("calib_curve - two class", {
-  res <- calib_curve(yardstick::two_class_example, truth = truth, predictions = Class1)
+  # result
+  res <- calib_curve(yardstick::two_class_example, truth = truth, predictions = Class1, bins = 15)
   expect_s3_class(res, "calib_df")
+
+  # internal checks
+  expect_error(calib_curve(yardstick::two_class_example, truth = truth, predictions = Class1, bins = -1))
+  expect_error(calib_curve(yardstick::two_class_example, truth = truth, predictions = Class1, bins = "a"))
+  # expect_error(calib_curve(yardstick::two_class_example, truth = truth, predictions = Class1:Class2))
+  # expect_error(calib_curve(yardstick::two_class_example, truth = truth, estimator = 1))
 })
 
 test_that("calib_curve - two class, with resamples", {

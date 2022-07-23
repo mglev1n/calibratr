@@ -11,6 +11,7 @@ calib_curve(data, ...)
   data,
   truth,
   ...,
+  bins = 10,
   na_rm = TRUE,
   event_level = yardstick:::yardstick_event_level(),
   case_weights = NULL
@@ -22,6 +23,8 @@ calib_curve(data, ...)
 \item{...}{A set of unquoted column names or one or more dplyr selector functions to choose which variables contain the class probabilities. If truth is binary, only 1 column should be selected. Otherwise, there should be as many columns as factor levels of truth.}
 
 \item{truth}{The unquoted column name corresponding to the \code{truth} column.}
+
+\item{bins}{A single \code{numeric} value defining the number of probability bins to consider. Defaults to 10.}
 
 \item{na_rm}{A logical value indicating whether NA values should be stripped before the computation proceeds.}
 
