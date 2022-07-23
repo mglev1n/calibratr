@@ -7,9 +7,9 @@
 <!-- badges: end -->
 
 The goal of calibratr is to provide additional performance/calibration
-metrics and features for use within the {yardstick} package in R. These
-functions enable evaluation of model performance from predictive models
-developed using the {tidymodels} framework.
+metrics and features for use within the {yardstick} package in R. The
+included functions enable evaluation of model performance from
+predictive models developed using the {tidymodels} framework.
 
 ## Installation
 

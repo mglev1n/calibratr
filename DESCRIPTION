@@ -1,5 +1,5 @@
 Package: calibratr
-Title: Calibration Metrics for Yardstick
+Title: Calibration and Performance Metrics for {yardstick}
 Version: 0.0.0.9000
 Authors@R: 
     person("Michael", "Levin", , "mglev1n@gmail.com", role = c("aut", "cre"),

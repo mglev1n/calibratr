@@ -4,7 +4,7 @@
 \name{calibratr-package}
 \alias{calibratr}
 \alias{calibratr-package}
-\title{calibratr: Calibration Metrics for Yardstick}
+\title{calibratr: Calibration and Performance Metrics for {yardstick}}
 \description{
 This package provides calibration metrics for use with the {yardstick} package, which is used to calculate performance metrics for models developed within the {Tidymodels} framework.
 }
